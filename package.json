@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cat site.part00 site.part01 site.part02 site.part03 site.part04 | base64 -d > /tmp/thailuck-site.tgz && tar -xzf /tmp/thailuck-site.tgz -C dist"
+    "build": "rm -rf dist && mkdir -p dist && cat payload.00 payload.01 payload.02 rem.00 rem.01 rem.02 rem.03 rem.04 | base64 -d > /tmp/thailuck-site.tgz && tar -xzf /tmp/thailuck-site.tgz -C dist"
   }
 }
