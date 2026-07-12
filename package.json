@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cp index.html about.html privacy.html terms.html dist/ && cp -R payload dist/payload"
+    "build": "rm -rf dist && mkdir -p dist && cp index.html dist/index.html && cp -R payload dist/payload"
   }
 }
