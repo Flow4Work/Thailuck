@@ -7,22 +7,22 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "/release-20260713-0735",
+      "destination": "/release-20260713-0750",
       "permanent": false
     },
     {
       "source": "/app",
-      "destination": "/release-20260713-0735",
+      "destination": "/release-20260713-0750",
       "permanent": false
     },
     {
       "source": "/app.html",
-      "destination": "/release-20260713-0735",
+      "destination": "/release-20260713-0750",
       "permanent": false
     },
     {
       "source": "/index.html",
-      "destination": "/release-20260713-0735",
+      "destination": "/release-20260713-0750",
       "permanent": false
     }
   ],
@@ -60,7 +60,7 @@
         },
         {
           "key": "X-Thailuck-Release",
-          "value": "20260713-0735"
+          "value": "20260713-0750"
         }
       ]
     }
