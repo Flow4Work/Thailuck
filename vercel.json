@@ -24,6 +24,16 @@
       "source": "/index.html",
       "destination": "/release-20260713-0750",
       "permanent": false
+    },
+    {
+      "source": "/release-20260713-0735",
+      "destination": "/release-20260713-0750",
+      "permanent": false
+    },
+    {
+      "source": "/release-20260713-0735.html",
+      "destination": "/release-20260713-0750",
+      "permanent": false
     }
   ],
   "headers": [
