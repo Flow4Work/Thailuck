@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "rm -rf dist && mkdir -p dist && cat site.part* | base64 --decode > /tmp/thailuck-site.tgz && tar -xzf /tmp/thailuck-site.tgz -C dist",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false
