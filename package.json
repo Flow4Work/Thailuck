@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cat payload/1.txt payload/2.txt payload/3.txt payload/4.txt payload/5.txt | tr -d '\\n\\r ' | base64 -d | gzip -dc > dist/index.html"
+    "build": "rm -rf dist && mkdir -p dist && cat payload/1.txt payload/2.txt payload/3.txt payload/4.txt payload/5.txt | tr -d '\\n\\r ' | base64 -d | gzip -dc > dist/index.html && node patch.mjs dist/index.html"
   }
 }
