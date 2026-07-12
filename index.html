@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#171328" name="theme-color"/>
+<meta content="มูดี — ดวงรายวันที่บอกสิ่งที่ควรทำจริง พร้อมบันทึกผลและแชร์ให้เพื่อน" name="description"/>
+<link href="manifest.webmanifest" rel="manifest"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&amp;family=Noto+Serif+Thai:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<title>มูดี — ดวงที่เอาไปใช้ได้จริง</title>
+<link href="styles.css" rel="stylesheet"/>
+</head>
+<body>
+<main class="app-shell">
+<header class="topbar">
+<div aria-label="มูดี" class="brand">
+<div aria-hidden="true" class="brand-mark">
+<svg fill="none" viewbox="0 0 24 24"><path d="M12 2.8a7.2 7.2 0 1 0 7.2 7.2A7 7 0 0 1 12 2.8Z" fill="url(#g)"></path><path d="m17.9 3.7.45 1.25 1.25.45-1.25.45-.45 1.25-.45-1.25-1.25-.45 1.25-.45.45-1.25Z" fill="#FFD88A"></path><defs><lineargradient gradientunits="userSpaceOnUse" id="g" x1="7" x2="16" y1="4" y2="18"><stop stop-color="#fff"></stop><stop offset="1" stop-color="#E5D7FF"></stop></lineargradient></defs></svg>
+</div>
+<div class="brand-copy"><strong>มูดี</strong><span>ดวงที่เอาไปใช้ได้จริง</span></div>
+</div>
+<button aria-label="แก้ไขโปรไฟล์" class="icon-btn" id="profileQuickBtn">
+<svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="8" r="3.3"></circle><path d="M5.7 19c.8-3.3 3-5 6.3-5s5.5 1.7 6.3 5"></path></svg>
+</button>
+</header>
+<section class="screen active" id="screen-home">
+<article class="hero">
+<div class="eyebrow" id="todayLabel">ดวงประจำวัน</div>
+<h1 id="heroTitle">วันนี้เหมาะกับการเริ่มก่อนคิดนาน</h1>
+<p class="hero-sub" id="heroSubtitle">พลังของวันนี้สนับสนุนการตัดสินใจเล็ก ๆ ที่ค้างอยู่ โดยเฉพาะเรื่องงานและการสื่อสาร</p>
+<div class="score-row">
+<div class="score-ring" id="scoreRing" style="--score-angle: 286deg">
+<div class="score-inner"><strong id="fortuneScore">79</strong><span>พลังวันนี้</span></div>
+</div>
+<div class="hero-action">
+<strong id="bestMoment">ช่วงเวลาที่ดีที่สุด 14:20–16:10</strong>
+<span id="luckyHint">ใช้สีม่วงอ่อน และเริ่มจากข้อความสั้น ๆ</span>
+</div>
+</div>
+</article>
+<div class="section-head">
+<div><h2>ภาพรวมของคุณ</h2><p>อ่านสั้น ๆ แล้วตัดสินใจได้เลย</p></div>
+<button class="text-btn" id="refreshFortuneBtn">ดูใหม่</button>
+</div>
+<div class="forecast-grid" id="forecastGrid"></div>
+<div aria-label="พื้นที่โฆษณา" class="ad-slot">
+        พื้นที่โฆษณา 320 × 50
+        <span>วางโฆษณาหลังเนื้อหาหลัก เพื่อลดการกดพลาด</span>
+</div>
+<div class="section-head">
+<div><h2>3 อย่างที่ควรทำวันนี้</h2><p>คำแนะนำที่ลงมือทำได้จริง</p></div>
+</div>
+<div class="action-list" id="actionList"></div>
+<div class="section-head">
+<div><h2>เมื่อวานเป็นอย่างไร</h2><p>คำตอบของคุณจะช่วยให้คำแนะนำแม่นขึ้น</p></div>
+</div>
+<section class="checkin" id="checkinCard">
+<div class="checkin-top">
+<div class="checkin-orb">↻</div>
+<div><h3 id="checkinTitle">คุณได้ทำสิ่งที่ตั้งใจไว้ไหม?</h3><p id="checkinText">เมื่อวานเราแนะนำให้คุณพูดตรงขึ้นหนึ่งระดับกับคนสำคัญ</p></div>
+</div>
+<div class="checkin-actions">
+<button data-result="good">ดีขึ้น</button>
+<button data-result="same">เหมือนเดิม</button>
+<button data-result="bad">ไม่เป็นไปตามนั้น</button>
+</div>
+</section>
+<div class="section-head">
+<div><h2>ส่งให้คนที่นึกถึง</h2><p>แชร์ดวงวันนี้เป็นภาพหรือข้อความ</p></div>
+</div>
+<section class="share-card">
+<h3>ดวงวันนี้ของฉันได้ <span id="shareScore">79</span>/100 ✦</h3>
+<p id="sharePreview">วันนี้เหมาะกับการเริ่มก่อนคิดนาน แล้วของคุณล่ะ?</p>
+<button class="primary-btn" id="shareBtn">แชร์ผ่าน LINE หรือแอปอื่น</button>
+</section>
+<div class="footer-links">
+        บริการนี้มีไว้เพื่อความบันเทิงและการทบทวนตนเอง ไม่ใช่คำแนะนำทางการเงิน การแพทย์ หรือกฎหมาย<br/>
+<a href="about.html">เกี่ยวกับเรา</a> · <a href="privacy.html">ความเป็นส่วนตัว</a> · <a href="terms.html">ข้อกำหนด</a>
+</div>
+</section>
+<section class="screen" id="screen-person">
+<div class="page-title"><h1>คนสำคัญ</h1><p>บันทึกคนที่คุณอยากเข้าใจ แล้วดูคำแนะนำที่ต่อเนื่องจากเรื่องเดิม</p></div>
+<div class="person-list" id="personList"></div>
+<div style="margin-top:14px"><button class="primary-btn" id="addPersonBtn" style="width:100%">+ เพิ่มคนสำคัญ</button></div>
+<div class="ad-slot">พื้นที่โฆษณาแบบเนทีฟ<span>แสดงหลังรายชื่อ ไม่วางติดปุ่มเพิ่มข้อมูล</span></div>
+</section>
+<section class="screen" id="screen-history">
+<div class="page-title"><h1>บันทึกดวง</h1><p>ย้อนดูคำแนะนำและผลที่เกิดขึ้น เพื่อเห็นรูปแบบของตัวเองชัดขึ้น</p></div>
+<div class="section-head" style="margin-top:0"><div><h2>7 วันที่ผ่านมา</h2><p>จุดสีแสดงวันที่เปิดดูดวง</p></div></div>
+<div class="week-strip" id="weekStrip"></div>
+<div class="section-head"><div><h2>เรื่องที่บันทึกไว้</h2><p>ข้อมูลเก็บเฉพาะในเครื่องนี้</p></div></div>
+<div class="history-list" id="historyList"></div>
+</section>
+<section class="screen" id="screen-profile">
+<div class="page-title"><h1>โปรไฟล์ของฉัน</h1><p>ข้อมูลพื้นฐานช่วยให้คำแนะนำแต่ละวันมีบริบทมากขึ้น</p></div>
+<section class="profile-card">
+<div class="profile-main">
+<div class="avatar profile-avatar" id="profileAvatar">ม</div>
+<div><h2 id="profileName">มะลิ</h2><p id="profileBirth">เกิดวันที่ 14 พฤษภาคม 1997</p></div>
+</div>
+<div class="profile-grid">
+<div class="profile-stat"><span>เปิดดูดวงต่อเนื่อง</span><strong id="streakStat">1 วัน</strong></div>
+<div class="profile-stat"><span>คำแนะนำที่บันทึก</span><strong id="historyStat">1 เรื่อง</strong></div>
+</div>
+</section>
+<div class="settings-list">
+<button class="settings-row" id="editProfileBtn"><span class="set-icon">✎</span><strong>แก้ไขข้อมูลส่วนตัว</strong><span>›</span></button>
+<button class="settings-row" id="notificationDemoBtn"><span class="set-icon">◷</span><strong>เวลาแจ้งเตือนดวงประจำวัน</strong><span>08:30</span></button>
+<button class="settings-row" id="clearDataBtn"><span class="set-icon">⌫</span><strong>ล้างข้อมูลในเครื่อง</strong><span>›</span></button>
+</div>
+<div class="footer-links"><a href="about.html">เกี่ยวกับเรา</a> · <a href="privacy.html">ความเป็นส่วนตัว</a> · <a href="terms.html">ข้อกำหนด</a></div>
+</section>
+</main>
+<nav aria-label="เมนูหลัก" class="bottom-nav">
+<button class="nav-btn active" data-screen="home"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="m4 10 8-6 8 6v9H4Z"></path><path d="M9 19v-5h6v5"></path></svg><span>วันนี้</span></button>
+<button class="nav-btn" data-screen="person"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M3.8 18c.6-3.1 2.4-4.7 5.2-4.7s4.6 1.6 5.2 4.7"></path><path d="M15.5 7.2a2.5 2.5 0 1 1 0 4.9M16 14c2.3.3 3.7 1.7 4.2 4"></path></svg><span>คนสำคัญ</span></button>
+<button class="nav-btn" data-screen="history"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M5 4h14v16H5z"></path><path d="M8 8h8M8 12h8M8 16h5"></path></svg><span>บันทึก</span></button>
+<button class="nav-btn" data-screen="profile"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="8" r="3.3"></circle><path d="M5.7 19c.8-3.3 3-5 6.3-5s5.5 1.7 6.3 5"></path></svg><span>โปรไฟล์</span></button>
+</nav>
+<div aria-labelledby="profileModalTitle" aria-modal="true" class="modal-backdrop" id="profileModal" role="dialog">
+<div class="modal">
+<div class="modal-head"><h2 id="profileModalTitle">ข้อมูลของคุณ</h2><button class="icon-btn close-btn" data-close="profileModal">×</button></div>
+<div class="field"><label for="nameInput">ชื่อเล่น</label><input id="nameInput" maxlength="24" placeholder="เช่น มะลิ"/></div>
+<div class="field"><label for="birthInput">วันเกิด</label><input id="birthInput" type="date"/></div>
+<div class="field"><label for="focusInput">เรื่องที่อยากโฟกัสตอนนี้</label><select id="focusInput"><option value="love">ความรัก</option><option value="work">งาน</option><option value="money">การเงิน</option><option value="self">ตัวเอง</option></select></div>
+<p class="form-note">ข้อมูลนี้เก็บไว้ในเบราว์เซอร์ของคุณเท่านั้น และสามารถล้างได้ทุกเมื่อ</p>
+<div class="modal-actions"><button class="secondary-btn" data-close="profileModal">ไว้ทีหลัง</button><button class="primary-btn" id="saveProfileBtn">บันทึกและดูดวง</button></div>
+</div>
+</div>
+<div aria-labelledby="personModalTitle" aria-modal="true" class="modal-backdrop" id="personModal" role="dialog">
+<div class="modal">
+<div class="modal-head"><h2 id="personModalTitle">เพิ่มคนสำคัญ</h2><button class="icon-btn close-btn" data-close="personModal">×</button></div>
+<div class="field"><label for="personNameInput">ชื่อหรือชื่อเรียก</label><input id="personNameInput" maxlength="24" placeholder="เช่น พีท"/></div>
+<div class="field"><label for="relationInput">ความสัมพันธ์</label><select id="relationInput"><option value="คนที่ชอบ">คนที่ชอบ</option><option value="แฟน">แฟน</option><option value="เพื่อน">เพื่อน</option><option value="ครอบครัว">ครอบครัว</option><option value="หัวหน้า/เพื่อนร่วมงาน">หัวหน้า/เพื่อนร่วมงาน</option></select></div>
+<div class="field"><label for="personBirthInput">วันเกิด (ไม่จำเป็น)</label><input id="personBirthInput" type="date"/></div>
+<div class="modal-actions"><button class="secondary-btn" data-close="personModal">ยกเลิก</button><button class="primary-btn" id="savePersonBtn">เพิ่มคนนี้</button></div>
+</div>
+</div>
+<div class="toast" id="toast">บันทึกแล้ว</div>
+<canvas height="1350" hidden="" id="shareCanvas" width="1080"></canvas>
+<script src="app.js"></script>
+</body>
+</html>
