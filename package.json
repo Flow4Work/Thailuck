@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cat payload/1.txt payload/2.txt payload/3.txt payload/4.txt payload/5.txt | tr -d '\\n\\r ' | base64 -d | gzip -dc > dist/release-20260713-0825.html && node patch.mjs dist/release-20260713-0825.html && node audit-fix-patch.mjs dist/release-20260713-0825.html && node share-cache-patch.mjs dist/release-20260713-0825.html && cp dist/release-20260713-0825.html dist/index.html && node kill-sw.mjs dist"
+    "build": "rm -rf dist && mkdir -p dist && cat payload/1.txt payload/2.txt payload/3.txt payload/4.txt payload/5.txt | tr -d '\\n\\r ' | base64 -d | gzip -dc > dist/release-20260713-1950.html && node patch.mjs dist/release-20260713-1950.html && node audit-fix-patch.mjs dist/release-20260713-1950.html && node share-cache-patch.mjs dist/release-20260713-1950.html && node engagement-flow-patch.mjs dist/release-20260713-1950.html && cp dist/release-20260713-1950.html dist/index.html && node kill-sw.mjs dist"
   }
 }
