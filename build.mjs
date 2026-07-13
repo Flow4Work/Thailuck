@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import zlib from 'node:zlib';
 
-const release = 'release-20260713-2055.html';
+const release = 'release-20260713-2130.html';
 const chunks = Array.from({ length: 6 }, (_, index) =>
   fs.readFileSync(new URL(`./clean-bundle/${index + 1}.txt`, import.meta.url), 'utf8').trim()
 ).join('');
@@ -97,6 +97,21 @@ files['app.js'] = replaceRequired(
   'check-in feedback display'
 );
 
+const serviceCss = fs.readFileSync(new URL('./service-v4.css', import.meta.url), 'utf8');
+const serviceJs = fs.readFileSync(new URL('./service-v4-clean.js', import.meta.url), 'utf8');
+files['index.html'] = replaceRequired(
+  files['index.html'],
+  '</head>',
+  `<style id="thailuck-service-v4">${serviceCss}</style></head>`,
+  'service v4 styles'
+);
+files['index.html'] = replaceRequired(
+  files['index.html'],
+  '</body>',
+  `<script id="thailuck-service-v4-runtime">${serviceJs}</script></body>`,
+  'service v4 runtime'
+);
+
 const dist = new URL('./dist/', import.meta.url);
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });
@@ -109,7 +124,7 @@ fs.copyFileSync(new URL('index.html', dist), new URL(release, dist));
 fs.copyFileSync(new URL('index.html', dist), new URL('404.html', dist));
 fs.writeFileSync(
   new URL('version.json', dist),
-  JSON.stringify({ version: '5.1.0', release, builtAt: new Date().toISOString() }),
+  JSON.stringify({ version: '5.2.0', release, builtAt: new Date().toISOString() }),
   'utf8'
 );
 
@@ -124,5 +139,8 @@ if (/formsubmit|flow4work@gmail|ผู้ดูแล/i.test(joined)) {
 if (!joined.includes('previousCheckinAdjustment')) {
   throw new Error('Check-in adjustment patch missing');
 }
+if (!joined.includes('ดูดวงโดยรวมของวันนี้') || !joined.includes('มหาโชค')) {
+  throw new Error('Service v4 experience missing');
+}
 
-console.log('Built privacy-safe Thailuck 5.1.0');
+console.log('Built privacy-safe Thailuck 5.2.0');
