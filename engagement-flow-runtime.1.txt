@@ -1,0 +1,59 @@
+(function(){
+'use strict';
+var VERSION='3.0.0';
+var COMPLETE_KEY='tl_flow_v3_complete';
+var CONTEXT_KEY='tl_question_context_v3';
+var CHECK_KEY='tl_question_checkin_v3';
+var SESSION_KEY='tl_question_session_v3';
+var PENDING_KEY='tl_question_pending_lead_v3';
+var nativeFetch=window.fetch?window.fetch.bind(window):null;
+var formSubmitObserved=false;
+var firstRun=document.documentElement.classList.contains('tl-first-run-pending');
+var visitorType=firstRun?'new':'returning';
+var sessionId=getSessionId();
+var questions=[
+{id:'love_silent',focus:'love',icon:'💬',title:'ทำไมเขาถึงเงียบไป?',hint:'ดูว่าเป็นเพราะหมดใจ หรือกำลังหลบแรงกดดัน'},
+{id:'love_thinking',focus:'love',icon:'♡',title:'เขายังคิดถึงฉันไหม?',hint:'แยกความคิดถึงออกจากความพร้อมที่จะกลับมา'},
+{id:'love_reconcile',focus:'love',icon:'↻',title:'เราจะกลับมาคบกันไหม?',hint:'ดูช่องทางกลับมาคุยและสิ่งที่ต้องเปลี่ยน'},
+{id:'love_message',focus:'love',icon:'✉',title:'ฉันควรทักไปก่อนไหม?',hint:'ดูจังหวะส่งข้อความและคำที่ควรใช้'},
+{id:'work_change',focus:'work',icon:'✦',title:'ฉันควรเปลี่ยนงานไหม?',hint:'ดูว่าควรเริ่มขยับ หรือควรรอให้พร้อมกว่าเดิม'},
+{id:'money_when',focus:'money',icon:'฿',title:'เงินจะดีขึ้นเมื่อไร?',hint:'ดูจังหวะเงินและสิ่งที่ควรลงมือก่อน'}
+];
+var elementMeta=[
+{id:'wood',th:'ไม้',icon:'木',meaning:'การเริ่มต้นและการเติบโต'},
+{id:'fire',th:'ไฟ',icon:'火',meaning:'การแสดงออกและความชัดเจน'},
+{id:'earth',th:'ดิน',icon:'土',meaning:'ความมั่นคงและข้อเท็จจริง'},
+{id:'metal',th:'ทอง',icon:'金',meaning:'ขอบเขตและการตัดสินใจ'},
+{id:'water',th:'น้ำ',icon:'水',meaning:'ความรู้สึกและการสังเกต'}
+];
+var flow={step:1,question:null,name:'',birth:'',time:'',mood:'unsure',relation:'unsure',lastContact:'week',consent:true,result:null};
+var saved=readJson(CONTEXT_KEY);
+if(saved&&saved.questionId){flow.question=questionById(saved.questionId);flow.name=saved.name||'';flow.birth=saved.birth||'';flow.time=saved.time||'';flow.mood=saved.mood||'unsure';flow.relation=saved.relation||'unsure';flow.lastContact=saved.lastContact||'week';flow.consent=saved.consent!==false;flow.result=saved.result||null}
+
+function readJson(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch(_){return null}}
+function writeJson(key,value){try{localStorage.setItem(key,JSON.stringify(value))}catch(_){}}
+function getSessionId(){try{var id=sessionStorage.getItem(SESSION_KEY);if(!id){id='S'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);sessionStorage.setItem(SESSION_KEY,id)}return id}catch(_){return 'S'+Date.now().toString(36)}}
+function bangkokDate(){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}catch(_){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}}
+function hash(value){var h=2166136261;for(var i=0;i<value.length;i++){h^=value.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function questionById(id){for(var i=0;i<questions.length;i++)if(questions[i].id===id)return questions[i];return null}
+function esc(value){return String(value==null?'':value).replace(/[&<>'"]/g,function(ch){return({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'})[ch]})}
+function setValue(el,value){if(!el)return;el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))}
+function sourceInfo(){var p=new URLSearchParams(location.search);var ref=(document.referrer||'').toLowerCase();var source=p.get('utm_source')||p.get('source')||(ref.indexOf('instagram')>=0?'instagram':ref.indexOf('facebook')>=0?'facebook':ref.indexOf('line.me')>=0?'line':'direct');var campaign=p.get('utm_campaign')||p.get('campaign')||p.get('post')||'none';return{source:source,campaign:campaign}}
+function currentQuestion(){return flow.question||questionById(saved&&saved.questionId)||questions[0]}
+function leadExtras(){var q=currentQuestion();var info=sourceInfo();return{question_id:q.id,question:q.title,category:q.focus,relation_status:q.focus==='love'?flow.relation:'not_applicable',last_contact:q.focus==='love'?flow.lastContact:'not_applicable',source:info.source,campaign:info.campaign,visitor_type:visitorType,session_id:sessionId,flow_version:VERSION,submitted_at:new Date().toISOString(),page:location.href}}
+function addExtrasToFormData(fd){var extras=leadExtras();Object.keys(extras).forEach(function(k){fd.set(k,extras[k])});return fd}
+function augmentBody(body,headers){if(body instanceof FormData)return addExtrasToFormData(body);if(body instanceof URLSearchParams){var e=leadExtras();Object.keys(e).forEach(function(k){body.set(k,e[k])});return body}if(typeof body==='string'){var type='';try{type=new Headers(headers||{}).get('content-type')||''}catch(_){}if(type.indexOf('json')>=0||body.trim().charAt(0)==='{'){try{var o=JSON.parse(body);Object.assign(o,leadExtras());return JSON.stringify(o)}catch(_){}}try{var sp=new URLSearchParams(body);var x=leadExtras();Object.keys(x).forEach(function(k){sp.set(k,x[k])});return sp.toString()}catch(_){}}return body}
+function installFetchHook(){if(!nativeFetch)return;window.fetch=function(resource,init){var url='';try{url=typeof resource==='string'?resource:resource.url||''}catch(_){}if(url.indexOf('formsubmit.co')>=0){formSubmitObserved=true;var next=Object.assign({},init||{});next.body=augmentBody(next.body,next.headers);return nativeFetch(resource,next)}return nativeFetch(resource,init)}}
+function endpoint(){try{if(typeof FORM==='string'&&FORM.indexOf('formsubmit.co')>=0)return FORM}catch(_){}var all='';for(var i=0;i<document.scripts.length;i++)all+=document.scripts[i].textContent||'';var m=all.match(/https:\/\/formsubmit\.co\/(?:ajax\/)?[A-Za-z0-9@._+%-]+/);return m?m[0]:'https://formsubmit.co/ajax/flow4work@gmail.com'}
+function fallbackLead(){if(!nativeFetch||!flow.consent||formSubmitObserved)return Promise.resolve();var fd=new FormData();fd.set('nickname',flow.name||'ไม่ระบุ');fd.set('birth',flow.birth);fd.set('birth_time',flow.time||'ไม่ระบุ');fd.set('focus',currentQuestion().focus);fd.set('mood',flow.mood);addExtrasToFormData(fd);return nativeFetch(endpoint(),{method:'POST',body:fd,headers:{Accept:'application/json'}}).then(function(){formSubmitObserved=true;try{localStorage.removeItem(PENDING_KEY)}catch(_){}}).catch(function(){writeJson(PENDING_KEY,{at:Date.now(),fields:Array.from(fd.entries())})})}
+function retryPending(){var p=readJson(PENDING_KEY);if(!p||!nativeFetch||!navigator.onLine||Date.now()-p.at>86400000)return;var fd=new FormData();(p.fields||[]).forEach(function(row){fd.set(row[0],row[1])});nativeFetch(endpoint(),{method:'POST',body:fd,headers:{Accept:'application/json'}}).then(function(){localStorage.removeItem(PENDING_KEY)}).catch(function(){})}
+function nativeProfileExists(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i)||'';if(!/duang|saju|luck/i.test(k))continue;var v=readJson(k);if(v&&v.profile&&v.profile.birth)return true}}catch(_){}return false}
+function clickChoice(value){var nodes=document.querySelectorAll('[data-v]');for(var i=0;i<nodes.length;i++){if(nodes[i].getAttribute('data-v')===value){nodes[i].click();return true}}return false}
+function syncNativeInputs(){var parts=(flow.birth||'').split('-');setValue(document.querySelector('#nameInput,input[name="nickname"]'),flow.name||'');setValue(document.querySelector('#birthInput,input[name="birth"]'),flow.birth||'');setValue(document.querySelector('#dayInput'),parts[2]?String(Number(parts[2])):'');setValue(document.querySelector('#monthInput'),parts[1]?String(Number(parts[1])):'');setValue(document.querySelector('#yearInput'),parts[0]||'');setValue(document.querySelector('#timeInput,input[name="birth_time"]'),flow.time||'');clickChoice(currentQuestion().focus);clickChoice(flow.mood);var c=document.querySelector('#consent');if(c){c.checked=!!flow.consent;c.dispatchEvent(new Event('change',{bubbles:true}))}}
+function updateNativeState(){try{if(typeof state!=='undefined'&&state&&state.profile){state.profile.name=flow.name||'';state.profile.birth=flow.birth;state.profile.time=flow.time||'';state.profile.focus=currentQuestion().focus;state.profile.mood=flow.mood;state.done=true;if(typeof save==='function')save()}}catch(_){}try{if(typeof s!=='undefined'&&s&&s.profile){s.profile.name=flow.name||'';s.profile.birth=flow.birth;s.profile.time=flow.time||'';s.profile.focus=currentQuestion().focus;s.profile.mood=flow.mood;s.done=true;if(typeof save==='function')save()}}catch(_){}
+}
+function triggerNativeReading(){syncNativeInputs();var btn=document.querySelector('#saveProfile,#saveProfileBtn');if(btn){try{btn.click()}catch(_){}}else updateNativeState();setTimeout(function(){if(!formSubmitObserved)fallbackLead()},900)}
+function elementReading(){var p=flow.birth.split('-').map(Number);var seed=hash(flow.birth+'|'+currentQuestion().id+'|'+bangkokDate());var baseIndex=(p[0]+p[1]*2+p[2]*3)%5;var dayIndex=(new Date().getFullYear()+new Date().getMonth()+1+new Date().getDate()*2)%5;var base=elementMeta[baseIndex],day=elementMeta[dayIndex],kind='tension',relation='พลังสองส่วนตึงกัน จึงควรเช็กข้อเท็จจริงก่อนตีความ';if(baseIndex===dayIndex){kind='same';relation='พลังพื้นฐานกับวันนี้ไปทางเดียวกัน ความรู้สึกจึงชัดและแรงกว่าปกติ'}else if((dayIndex+1)%5===baseIndex){kind='support';relation='พลังของวันนี้หนุนธาตุพื้นฐาน จึงเหมาะกับการขยับเล็ก ๆ อย่างมีสติ'}else if((baseIndex+1)%5===dayIndex){kind='drain';relation='คุณมีแนวโน้มเป็นฝ่ายใช้พลังมากกว่า ควรกำหนดขอบเขตให้ชัด'}return{base:base,day:day,kind:kind,relation:relation,seed:seed}}
+function nativeMoment(){var el=document.querySelector('#moment,#bestMoment');var t=el?el.textContent.trim():'';return t&&t.length<60?t:['ช่วง 10:00–12:00','ช่วง 14:00–16:00','ช่วง 19:00–21:00'][elementReading().seed%3]}
+function previousFeedback(){var f=readJson(CHECK_KEY);return f&&f.date!==bangkokDate()?f:null}
+function feedbackAdjustment(){var f=previousFeedback();if(!f)return'';if(f.result==='good')return'เมื่อวานวิธีที่เลือกได้ผล วันนี้ควรรักษาจังหวะเดิมและไม่เร่งให้มากขึ้น';if(f.result==='same')return'เมื่อวานสถานการณ์ยังไม่เปลี่ยน วันนี้คำแนะนำจึงลดแรงกดดันและเน้นคำถามที่ตอบง่ายกว่าเดิม';return'เมื่อวานผลไม่เป็นตามคาด วันนี้คำแนะนำจึงเปลี่ยนจากการรอเฉย ๆ เป็นการตั้งขอบเขตหรือขอความชัดเจนเพียงครั้งเดียว'}
