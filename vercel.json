@@ -4,58 +4,6 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/release-20260713-1950",
-      "permanent": false
-    },
-    {
-      "source": "/app",
-      "destination": "/release-20260713-1950",
-      "permanent": false
-    },
-    {
-      "source": "/app.html",
-      "destination": "/release-20260713-1950",
-      "permanent": false
-    },
-    {
-      "source": "/index.html",
-      "destination": "/release-20260713-1950",
-      "permanent": false
-    },
-    {
-      "source": "/release-20260713-0735",
-      "destination": "/release-20260713-1950",
-      "permanent": false
-    },
-    {
-      "source": "/release-20260713-0735.html",
-      "destination": "/release-20260713-1950",
-      "permanent": false
-    },
-    {
-      "source": "/release-20260713-0750",
-      "destination": "/release-20260713-1950",
-      "permanent": false
-    },
-    {
-      "source": "/release-20260713-0750.html",
-      "destination": "/release-20260713-1950",
-      "permanent": false
-    },
-    {
-      "source": "/release-20260713-0825",
-      "destination": "/release-20260713-1950",
-      "permanent": false
-    },
-    {
-      "source": "/release-20260713-0825.html",
-      "destination": "/release-20260713-1950",
-      "permanent": false
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -73,10 +21,6 @@
           "value": "no-store"
         },
         {
-          "key": "Surrogate-Control",
-          "value": "no-store"
-        },
-        {
           "key": "Pragma",
           "value": "no-cache"
         },
@@ -85,12 +29,8 @@
           "value": "0"
         },
         {
-          "key": "Clear-Site-Data",
-          "value": "\"cache\""
-        },
-        {
           "key": "X-Thailuck-Release",
-          "value": "20260713-1950"
+          "value": "20260713-2035"
         }
       ]
     }
