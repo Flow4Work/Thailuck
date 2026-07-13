@@ -88,13 +88,12 @@ files['app.js'] = replaceRequired(
   'check-in adjustment function'
 );
 
+const feedbackMarker = '            <div class="fortune-center">';
+const feedbackTemplate = "            ${r.feedbackNote ? `<div class=\"feedback-note\">${escapeHtml(r.feedbackNote)}</div>` : ''}\n            <div class=\"fortune-center\">";
 files['app.js'] = replaceRequired(
   files['app.js'],
-  String.raw`            <div class="core-message"><span>\${escapeHtml(r.coreLines[0])}</span><span>\${escapeHtml(r.coreLines[1])}</span></div>
-            <div class="fortune-center">`,
-  String.raw`            <div class="core-message"><span>\${escapeHtml(r.coreLines[0])}</span><span>\${escapeHtml(r.coreLines[1])}</span></div>
-            \${r.feedbackNote ? \`<div class="feedback-note">\${escapeHtml(r.feedbackNote)}</div>\` : ''}
-            <div class="fortune-center">`,
+  feedbackMarker,
+  feedbackTemplate,
   'check-in feedback display'
 );
 
